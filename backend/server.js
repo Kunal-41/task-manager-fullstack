@@ -14,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api", require("./routes/authRoutes"));
+app.use("/api/tasks", require("./routes/taskRoutes"));
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend running at http://localhost:${PORT}`);
