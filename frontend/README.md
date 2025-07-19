@@ -77,7 +77,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 This is the frontend part of a **fullstack task manager app**, built using **React.js**.
 
 ✅ Basic login and register UI is complete  
-❌ Backend API and MongoDB integration coming soon
+
 
 ---
 
@@ -131,10 +131,6 @@ frontend/
 
 ---
 
-## 📌 Status
-
-This project is a **work in progress**.  
-Frontend UI is working — backend and database will be added soon.
 
 ---
 
@@ -146,7 +142,6 @@ Made by **Kunal Pantawane**
 
 ## 🧪 Final Notes
 
-- Only the `frontend/` folder is currently active.
 - Use `.gitignore` to exclude `node_modules/`
 - Push with:
 
