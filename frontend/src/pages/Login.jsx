@@ -1,32 +1,74 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { API_ENDPOINTS } from '../config/api';
+import './Auth.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
+    
     try {
-      const res = await axios.post('http://localhost:5000/api/login', { email, password });
-      localStorage.setItem('token', res.data.token); // Save JWT
-      alert('Login successful!');
-      // navigate('/dashboard'); // or any protected route
+      const res = await axios.post(API_ENDPOINTS.AUTH.LOGIN, { email, password });
+      localStorage.setItem('token', res.data.token);
+      navigate('/dashboard');
     } catch (error) {
-      alert('Login failed. ' + error.response?.data?.message || error.message);
+      setError(error.response?.data?.message || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto', paddingTop: '100px' }}>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button type="submit">Login</button>
-      </form>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2>Welcome Back</h2>
+        <p>Sign in to your account</p>
+        
+        {location.state?.message && (
+          <div className="success-message">{location.state.message}</div>
+        )}
+        {error && <div className="error-message">{error}</div>}
+        
+        <form onSubmit={handleLogin} className="auth-form">
+          <div className="form-group">
+            <input 
+              type="email" 
+              placeholder="Email" 
+              required 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
+            />
+          </div>
+          <div className="form-group">
+            <input 
+              type="password" 
+              placeholder="Password" 
+              required 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+            />
+          </div>
+          <button type="submit" disabled={loading} className="auth-button">
+            {loading ? 'Signing in...' : 'Sign In'}
+          </button>
+        </form>
+        
+        <div className="auth-footer">
+          <p>Don't have an account? <Link to="/register">Sign up</Link></p>
+        </div>
+      </div>
     </div>
   );
 };
